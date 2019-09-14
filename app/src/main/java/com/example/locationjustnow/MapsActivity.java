@@ -50,7 +50,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //create cameraUpdate variable
         CameraUpdate cameraUpdate;
-        cameraUpdate = CameraUpdateFactory.newLatLngZoom(iceland, 5.0f);
+        cameraUpdate = CameraUpdateFactory.newLatLngZoom(iceland, 14.0f);
 
         mMap.moveCamera(cameraUpdate);
         //mMap.addMarker(new MarkerOptions().position(iceland).title("Marker in iceland"));
