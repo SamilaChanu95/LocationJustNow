@@ -2,12 +2,16 @@ package com.example.locationjustnow;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -39,11 +43,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        //65.003542, -18.309250
+        //65.003542, -18.309250 iceland
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in Iceland and move the camera
         LatLng iceland = new LatLng(65.003542, -18.309250);
-        mMap.addMarker(new MarkerOptions().position(iceland).title("Marker in iceland"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(iceland));
+
+        //create cameraUpdate variable
+        CameraUpdate cameraUpdate;
+        cameraUpdate = CameraUpdateFactory.newLatLngZoom(iceland, 5.0f);
+
+        mMap.moveCamera(cameraUpdate);
+        //mMap.addMarker(new MarkerOptions().position(iceland).title("Marker in iceland"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(iceland));
+
+        //create variable
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(iceland);
+        markerOptions.title("Welcome to Iceland.");
+        markerOptions.snippet("Fantastic");
+        mMap.addMarker(markerOptions);
+
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(iceland);
+        circleOptions.radius(300);
+        circleOptions.strokeWidth(20.0f);
+        circleOptions.strokeColor(Color.YELLOW);
+        mMap.addCircle(circleOptions);
+
+
+
     }
 }
