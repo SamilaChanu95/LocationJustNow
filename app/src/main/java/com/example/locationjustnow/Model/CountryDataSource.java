@@ -70,5 +70,11 @@ public class CountryDataSource {
 
     }
 
+    public String getTheInfoOfTheCountry(String country) {
+
+        return  countriesAndMessages.get(country);
+
+    }
+
 
 }
