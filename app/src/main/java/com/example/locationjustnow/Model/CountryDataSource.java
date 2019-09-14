@@ -13,7 +13,11 @@ public class CountryDataSource {
 
     private Hashtable<String, String> countriesAndMessages;
 
+    public CountryDataSource(Hashtable<String, String> countriesAndMessages) {
 
+        this.countriesAndMessages = countriesAndMessages;
+
+    }
 
 
 }
