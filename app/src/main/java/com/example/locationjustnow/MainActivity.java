@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.locationjustnow.Model.CountryDataSource;
+
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView txt_value;
     Button btn_voice_intent;
 
+    //create the variable
+    public static CountryDataSource countryDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_voice_intent = (Button) findViewById(R.id.btnVoiceIntent);
 
         btn_voice_intent.setOnClickListener(MainActivity.this);
+
+        //Create Hash Table value
+        Hashtable<String, String> countriesAndMessages = new Hashtable<>();
+        countriesAndMessages.put("Canada","Welcome to Canada.");
+        countriesAndMessages.put("France","Welcome to Canada.");
+        countriesAndMessages.put("Srilanka","Welcome to Srilanka.");
+        countriesAndMessages.put("England","Welcome to England.");
+        countriesAndMessages.put("China","Welcome to China.");
+        countriesAndMessages.put("Japan","Welcome to Japan.");
+        countriesAndMessages.put("Brazil","Welcome to Brazil.");
+        countriesAndMessages.put("Greenland","Welcome to Greenland.");
+
+        countryDataSource = new CountryDataSource(countriesAndMessages);
 
         // ensure device support or not to speech recognition
         PackageManager packageManager = this.getPackageManager();
@@ -81,7 +100,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //precise of user's words (get the word or telled something)
             float[] confidLevels = data.getFloatArrayExtra(RecognizerIntent.EXTRA_CONFIDENCE_SCORES);
 
-            int index = 0;
+            //create String type variable
+            String countryMatchedWithUserWord = countryDataSource.matchWithMinimumConfidenceLevelOfUserWords(voiceWords,confidLevels);
+
+            //pass this data to map activity
+            Intent myMapActivity  = new Intent(MainActivity.this, MapsActivity.class);
+            myMapActivity.putExtra(CountryDataSource.COUNTRY_KEY, countryMatchedWithUserWord);
+            startActivity(myMapActivity);
+
+            /*int index = 0;
 
             for(String userWord : voiceWords) {
 
@@ -92,6 +119,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }
+
+             */
 
         }
     }
