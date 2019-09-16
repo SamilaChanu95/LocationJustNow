@@ -2,9 +2,12 @@ package com.example.locationjustnow;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.location.Geocoder;
 import android.os.Bundle;
 
+import com.example.locationjustnow.Model.CountryDataSource;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,18 +18,35 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    //Get the country from main activity class
+    private String receiveCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //intent use for data exchange with main activity
+        Intent mainActivityIntent = this.getIntent();
+        receiveCountry = mainActivityIntent.getStringExtra(CountryDataSource.COUNTRY_KEY);
+        if (receiveCountry == null) {
+
+            receiveCountry = CountryDataSource.DEFAULT_COUNTRY_NAME;
+        }
+
+        // before the map in ready so need to get the country
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //if map is ready then get the data from MainActivity
     }
 
 
@@ -43,6 +63,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        /* using for create circle and mark the particular location
         //65.003542, -18.309250 iceland
 
         // Add a marker in Iceland and move the camera
@@ -69,8 +90,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         circleOptions.strokeWidth(20.0f);
         circleOptions.strokeColor(Color.YELLOW);
         mMap.addCircle(circleOptions);
+        */
 
+        double countryLatitude = CountryDataSource.DEFAULT_COUNTRY_LATITUDE;
+        double countryLogitude = CountryDataSource.DEFAULT_COUNTRY_LONGITUDE;
 
+        CountryDataSource countryDataSource = MainActivity.countryDataSource;
+
+        //get the value from getTheInfoOfTheCountry method in CountryDatasource java class
+        String countryMessage = countryDataSource.getTheInfoOfTheCountry(receiveCountry);
+
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        try {
+
+            String countryAddress = receiveCountry;
+
+        } catch (IOException ioe) {
+
+        }
 
     }
 }
