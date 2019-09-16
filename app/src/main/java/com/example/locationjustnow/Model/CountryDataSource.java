@@ -11,7 +11,7 @@ public class CountryDataSource {
     public static final String DEFAULT_COUNTRY_NAME = "Canada";
     public static final double DEFAULT_COUNTRY_LATITUDE = 59.969151;
     public static final double DEFAULT_COUNTRY_LONGITUDE = -111.459050;
-    public static final String DEFAULT_MESSAGE = "Welcome!";
+    public static final String DEFAULT_MESSAGE = "Be Happy!";
 
     //using key and value for countries and messages
     private Hashtable<String, String> countriesAndMessages;
