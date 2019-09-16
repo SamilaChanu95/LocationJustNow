@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -93,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         */
 
         double countryLatitude = CountryDataSource.DEFAULT_COUNTRY_LATITUDE;
-        double countryLogitude = CountryDataSource.DEFAULT_COUNTRY_LONGITUDE;
+        double countryLongitude = CountryDataSource.DEFAULT_COUNTRY_LONGITUDE;
 
         CountryDataSource countryDataSource = MainActivity.countryDataSource;
 
@@ -104,10 +106,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
 
             String countryAddress = receiveCountry;
+            //Address is a class that representing an address such as set of Strings describing a location.
+            List <Address> countryAddresses = geocoder.getFromLocationName(countryAddress,10);
+
+            if(countryAddresses != null) {
+
+                countryLatitude = countryAddresses.get(0).getLatitude();
+                countryLongitude = countryAddresses.get(0).getLongitude();
+
+            }
+
+            else {
+
+                receiveCountry = CountryDataSource.DEFAULT_COUNTRY_NAME;
+
+            }
 
         } catch (IOException ioe) {
 
+            receiveCountry = CountryDataSource.DEFAULT_COUNTRY_NAME;
+
         }
+
+        LatLng myCountryLocation = new LatLng(countryLatitude, countryLongitude);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(myCountryLocation, 12.0f);
+        mMap.moveCamera(cameraUpdate);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(myCountryLocation);
+        markerOptions.title(countryMessage);
+        markerOptions.snippet(CountryDataSource.DEFAULT_MESSAGE);
+        mMap.addMarker(markerOptions);
+
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(myCountryLocation);
+        circleOptions.radius(400);
+        circleOptions.strokeWidth(10.0f);
+        circleOptions.strokeColor(Color.CYAN);
+        mMap.addCircle(circleOptions);
 
     }
 }
